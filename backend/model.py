@@ -18,7 +18,7 @@ from xgboost import XGBClassifier
 # =========================================
 # 🔀 SPLIT
 # =========================================
-df=pd.read_csv("cleaned_data.csv")
+df=pd.read_csv(r"data\cleaned_data.csv")
 X = df.drop(columns=['Churn'])
 y = df['Churn']
 
@@ -134,3 +134,12 @@ plt.show()
 # =========================================
 best_model_name = results_df.sort_values(by="F1", ascending=False).iloc[0]["Model"]
 print("\nBest Model based on F1:", best_model_name)
+# =========================================
+# 💾 SAVE BEST MODEL
+# =========================================
+best_model = models[best_model_name]
+
+joblib.dump(best_model, "model.pkl")
+joblib.dump(X.columns, "columns.pkl")
+
+print("Model and columns saved successfully")

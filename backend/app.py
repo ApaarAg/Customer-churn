@@ -34,27 +34,32 @@ def home():
 # =========================================
 @app.post("/predict")
 def predict(data: dict):
+    try:
+        # ==============================
+        # 🔹 CREATE DF
+        # ==============================
+        df = pd.DataFrame([data])
 
-    df = pd.DataFrame([data])
+        # ==============================
+        # 🔹 MATCH TRAINING COLUMNS
+        # ==============================
+        df = df.reindex(columns=columns, fill_value=0)
 
-    # ===== FEATURE ENGINEERING (same as training) =====
-    df['Charges_per_tenure'] = df['MonthlyCharges'] / (df['tenure'] + 1)
-    df['TotalCharges_log'] = np.log1p(df['TotalCharges'])
-    df['High_Spender'] = (df['MonthlyCharges'] > 70).astype(int)
+        df = df.astype(float)
 
-    # ===== HANDLE MISSING COLUMNS =====
-    df = df.reindex(columns=columns, fill_value=0)
+        # ==============================
+        # 🔹 PREDICT
+        # ==============================
+        prediction = model.predict(df)[0]
+        probability = model.predict_proba(df)[0][1]
 
-    # ===== PREDICT =====
-    prediction = model.predict(df)[0]
-    probability = model.predict_proba(df)[0][1]
+        return {
+            "prediction": int(prediction),
+            "probability": float(probability)
+        }
 
-    return {
-        "prediction": int(prediction),
-        "probability": float(probability)
-    }
-
-
+    except Exception as e:
+        return {"error": str(e)}
 
 app.add_middleware(
     CORSMiddleware,
