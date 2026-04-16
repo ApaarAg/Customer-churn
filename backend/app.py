@@ -3,6 +3,7 @@
 # =========================================
 from fastapi import FastAPI
 import joblib
+import numpy as np
 import pandas as pd
 from fastapi.middleware.cors import CORSMiddleware
 # =========================================
@@ -33,17 +34,19 @@ def home():
 # =========================================
 @app.post("/predict")
 def predict(data: dict):
-    
-    # Convert incoming JSON to DataFrame
+
     df = pd.DataFrame([data])
 
-    # Align columns with training data
+    # ===== FEATURE ENGINEERING (same as training) =====
+    df['Charges_per_tenure'] = df['MonthlyCharges'] / (df['tenure'] + 1)
+    df['TotalCharges_log'] = np.log1p(df['TotalCharges'])
+    df['High_Spender'] = (df['MonthlyCharges'] > 70).astype(int)
+
+    # ===== HANDLE MISSING COLUMNS =====
     df = df.reindex(columns=columns, fill_value=0)
 
-    # Model prediction
+    # ===== PREDICT =====
     prediction = model.predict(df)[0]
-
-    # Probability of churn
     probability = model.predict_proba(df)[0][1]
 
     return {
