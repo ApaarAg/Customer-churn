@@ -35,13 +35,58 @@ def home():
 @app.post("/predict")
 def predict(data: dict):
     try:
-        # ==============================
-        # 🔹 CREATE DF
-        # ==============================
         df = pd.DataFrame([data])
 
         # ==============================
-        # 🔹 MATCH TRAINING COLUMNS
+        # 🔹 BASIC CLEANING
+        # ==============================
+        df.drop(columns=['customerID'], errors='ignore', inplace=True)
+
+        df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
+        df['TotalCharges'] = df['TotalCharges'].fillna(0)
+
+        # ==============================
+        # 🔹 FEATURE ENGINEERING
+        # ==============================
+        df['Charges_per_tenure'] = df['MonthlyCharges'] / (df['tenure'] + 1)
+        df['TotalCharges_log'] = np.log1p(df['TotalCharges'])
+
+        df['High_Spender'] = (df['MonthlyCharges'] > 70).astype(int)
+
+        df['high_risk'] = (
+            (df['MonthlyCharges'] > df['MonthlyCharges'].quantile(0.7)) &
+            (df['tenure'] < df['tenure'].quantile(0.3))
+        ).astype(int)
+
+        df['tenure_group'] = pd.cut(
+            df['tenure'],
+            bins=[0,12,24,48,72],
+            labels=[0,1,2,3],
+            include_lowest=True
+        ).astype(int)
+
+        df['Contract_Risk'] = df['Contract'].map({
+            'Month-to-month': 2,
+            'One year': 1,
+            'Two year': 0
+        })
+
+        service_cols = [
+            'PhoneService','MultipleLines','OnlineSecurity','OnlineBackup',
+            'DeviceProtection','TechSupport','StreamingTV','StreamingMovies'
+        ]
+
+        df['Total_Services'] = df[service_cols].apply(
+            lambda x: x.isin(['Yes']).sum(), axis=1
+        )
+
+        # ==============================
+        # 🔹 ENCODING (CRITICAL)
+        # ==============================
+        df = pd.get_dummies(df, drop_first=True)
+
+        # ==============================
+        # 🔹 ALIGN WITH TRAINING
         # ==============================
         df = df.reindex(columns=columns, fill_value=0)
 
