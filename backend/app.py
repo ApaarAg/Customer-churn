@@ -90,7 +90,13 @@ def predict(data: dict):
         # ==============================
         df = df.reindex(columns=columns, fill_value=0)
 
-        df = df.astype(float)
+        # ==============================
+        # 🔹 FORCE NUMERIC (FINAL FIX)
+        # ==============================
+        for col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+
+        df = df.fillna(0)
 
         # ==============================
         # 🔹 PREDICT
