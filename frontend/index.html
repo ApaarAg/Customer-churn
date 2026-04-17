@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html class="dark" lang="en">
 
 <head>
@@ -7,516 +6,618 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>CELESTIAL AI | Churn Intelligence</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
 
     <style>
+        :root {
+            --clr-bg: #04080f;
+            --clr-surface: #080f1e;
+            --clr-panel: rgba(10, 18, 36, 0.75);
+            --clr-border: rgba(137, 172, 255, 0.08);
+            --clr-border-hover: rgba(137, 172, 255, 0.2);
+            --clr-primary: #89acff;
+            --clr-primary-dim: #5073c4;
+            --clr-accent: #00d4ff;
+            --clr-danger: #ff5f5b;
+            --clr-success: #22d3a0;
+            --clr-text: #dce7ff;
+            --clr-muted: #6b7a9e;
+            --clr-input-bg: #0b1428;
+        }
+
+        * { box-sizing: border-box; }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #060e20;
-            color: #37393e;
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--clr-bg);
+            color: var(--clr-text);
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        h1,
-        h2,
-        h3,
-        .font-headline {
-            font-family: 'Manrope', sans-serif;
+        h1, h2, h3, .syne { font-family: 'Syne', sans-serif; }
+
+        /* ── Background orbs ── */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20vh;
+            left: -10vw;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(ellipse, rgba(137, 172, 255, 0.045) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -15vh;
+            right: -10vw;
+            width: 55vw;
+            height: 55vw;
+            background: radial-gradient(ellipse, rgba(0, 212, 255, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .glass-panel {
-            background: rgba(15, 25, 48, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+        /* ── Panels ── */
+        .glass {
+            background: var(--clr-panel);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--clr-border);
+            border-radius: 20px;
+        }
+        .glass-inner {
+            background: rgba(8, 15, 30, 0.6);
+            border: 1px solid var(--clr-border);
+            border-radius: 12px;
         }
 
-        .glow-primary {
-            box-shadow: 0 0 40px rgba(137, 172, 255, 0.06);
+        /* ── Inputs ── */
+        select, input[type="range"] {
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-
-        .beveled-edge {
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        select {
+            background: var(--clr-input-bg);
+            border: 1px solid rgba(137, 172, 255, 0.12);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: var(--clr-text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.875rem;
+            width: 100%;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a9e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
         }
-
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
+        select:focus {
+            border-color: var(--clr-primary-dim);
+            box-shadow: 0 0 0 3px rgba(137, 172, 255, 0.08);
         }
+        select option { background: #0b1428; }
 
+        /* ── Range sliders ── */
         input[type="range"] {
             -webkit-appearance: none;
             appearance: none;
-            background: #192540;
-            height: 4px;
+            background: rgba(137, 172, 255, 0.1);
+            height: 3px;
             border-radius: 2px;
+            width: 100%;
+            border: none;
         }
-
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 20px;
-            width: 20px;
+            height: 18px;
+            width: 18px;
             border-radius: 50%;
-            background: #89acff;
+            background: var(--clr-primary);
             cursor: pointer;
-            border: 2px solid #060e20;
-            box-shadow: 0 0 10px rgba(137, 172, 255, 0.5);
+            border: 2px solid var(--clr-bg);
+            box-shadow: 0 0 12px rgba(137, 172, 255, 0.5);
+            transition: transform 0.15s, box-shadow 0.15s;
         }
-
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 18px rgba(137, 172, 255, 0.7);
+        }
         input[type="range"]::-moz-range-thumb {
-            height: 20px;
-            width: 20px;
+            height: 18px; width: 18px;
             border-radius: 50%;
-            background: #89acff;
+            background: var(--clr-primary);
             cursor: pointer;
             border: none;
         }
 
-        .gauge-circle {
-            transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        /* ── Gauge ── */
+        .gauge-ring { transition: stroke-dashoffset 1.1s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.5s ease; }
+
+        /* ── Predict button ── */
+        .predict-btn {
+            background: linear-gradient(135deg, #3a5fd4 0%, #6b8fff 50%, #3a5fd4 100%);
+            background-size: 200% 200%;
+            background-position: 0% 50%;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            width: 100%;
+            color: #fff;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-position 0.4s, transform 0.15s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .predict-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.07) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+        .predict-btn:hover {
+            background-position: 100% 50%;
+            box-shadow: 0 0 40px rgba(137, 172, 255, 0.25), 0 8px 32px rgba(0,0,0,0.4);
+            transform: translateY(-1px);
+        }
+        .predict-btn:hover::after { transform: translateX(100%); }
+        .predict-btn:active { transform: scale(0.98) translateY(0); }
+        .predict-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        .result-text {
+        /* ── Section label ── */
+        .eyebrow {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--clr-muted);
+            font-weight: 600;
+        }
+
+        /* ── Field label ── */
+        .field-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--clr-muted);
+            letter-spacing: 0.03em;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        /* ── Result states ── */
+        .result-idle   { --gauge-color: var(--clr-primary); }
+        .result-high   { --gauge-color: var(--clr-danger); }
+        .result-low    { --gauge-color: var(--clr-success); }
+        .result-error  { --gauge-color: var(--clr-danger); }
+
+        @keyframes analyzing-pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        .analyzing-state { animation: analyzing-pulse 1.5s ease-in-out infinite; }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in { animation: fadeSlideUp 0.4s ease forwards; }
+
+        /* ── Divider line ── */
+        .section-divider {
+            border: none;
+            border-top: 1px solid rgba(137, 172, 255, 0.07);
+            margin: 28px 0;
+        }
+
+        /* ── Nav pill ── */
+        .nav-pill {
+            font-size: 0.8rem;
+            font-family: 'Syne', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            color: var(--clr-primary);
+            background: rgba(137, 172, 255, 0.08);
+            border: 1px solid rgba(137, 172, 255, 0.15);
+            border-radius: 9999px;
+            padding: 5px 14px;
+        }
+
+        /* ── Status dot ── */
+        .status-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--clr-success);
+            box-shadow: 0 0 8px var(--clr-success);
+        }
+
+        /* ── Risk badge ── */
+        .risk-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
             transition: all 0.4s ease;
         }
+        .risk-badge.idle    { background: rgba(137,172,255,0.08); color: var(--clr-primary); border: 1px solid rgba(137,172,255,0.15); }
+        .risk-badge.high    { background: rgba(255,95,91,0.12);   color: var(--clr-danger);  border: 1px solid rgba(255,95,91,0.2); }
+        .risk-badge.low     { background: rgba(34,211,160,0.1);   color: var(--clr-success); border: 1px solid rgba(34,211,160,0.2); }
+        .risk-badge.loading { background: rgba(137,172,255,0.08); color: var(--clr-primary); border: 1px solid rgba(137,172,255,0.15); }
 
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 40px rgba(137, 172, 255, 0.2); }
-            50% { box-shadow: 0 0 60px rgba(137, 172, 255, 0.4); }
+        /* ── Insight cards ── */
+        .insight-card {
+            background: rgba(137, 172, 255, 0.04);
+            border: 1px solid rgba(137, 172, 255, 0.08);
+            border-radius: 10px;
+            padding: 14px 16px;
+            transition: border-color 0.3s;
+        }
+        .insight-card:hover { border-color: rgba(137, 172, 255, 0.16); }
+
+        /* ── Material icon align ── */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+            font-size: 1.1rem;
         }
 
-        .analyzing {
-            animation: pulse-glow 2s ease-in-out infinite;
-        }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--clr-bg); }
+        ::-webkit-scrollbar-thumb { background: rgba(137,172,255,0.15); border-radius: 10px; }
     </style>
-    <script id="tailwind-config">
+
+    <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
-                    "colors": {
-                        "primary-dim": "#126ef1",
-                        "on-surface": "#dee5ff",
-                        "surface": "#060e20",
-                        "on-secondary-container": "#ebd8ff",
-                        "tertiary-container": "#00eefc",
-                        "surface-tint": "#89acff",
-                        "tertiary-fixed-dim": "#00deec",
-                        "primary-container": "#729eff",
-                        "tertiary-fixed": "#00eefc",
-                        "surface-container": "#0f1930",
-                        "surface-container-lowest": "#000000",
-                        "tertiary-dim": "#00deec",
-                        "inverse-primary": "#0059ca",
-                        "primary-fixed": "#729eff",
-                        "error-container": "#9f0519",
-                        "on-error-container": "#ffa8a3",
-                        "secondary-fixed": "#e1c7ff",
-                        "on-secondary": "#2f0060",
-                        "inverse-surface": "#faf8ff",
-                        "on-secondary-fixed-variant": "#6f08d0",
-                        "on-surface-variant": "#a3aac4",
-                        "outline": "#6d758c",
-                        "surface-container-highest": "#192540",
-                        "on-background": "#dee5ff",
-                        "on-tertiary-fixed": "#003f43",
-                        "secondary-container": "#6e06d0",
-                        "on-secondary-fixed": "#4a0090",
-                        "outline-variant": "#40485d",
-                        "inverse-on-surface": "#4d556b",
-                        "tertiary": "#8ff5ff",
-                        "on-tertiary-container": "#005359",
-                        "on-primary-fixed-variant": "#002965",
-                        "surface-dim": "#060e20",
-                        "background": "#060e20",
-                        "on-tertiary-fixed-variant": "#005e64",
-                        "surface-bright": "#1f2b49",
-                        "error-dim": "#d7383b",
-                        "on-primary-fixed": "#000000",
-                        "on-primary-container": "#002052",
-                        "on-error": "#490006",
-                        "primary-fixed-dim": "#5990ff",
-                        "surface-variant": "#192540",
-                        "surface-container-high": "#141f38",
-                        "secondary-dim": "#9547f7",
-                        "secondary": "#b884ff",
+                    colors: {
+                        "surface": "#04080f",
+                        "on-surface": "#dce7ff",
+                        "on-surface-variant": "#6b7a9e",
                         "primary": "#89acff",
-                        "on-tertiary": "#005d63",
-                        "secondary-fixed-dim": "#d6b6ff",
-                        "surface-container-low": "#091328",
-                        "error": "#ff716c",
-                        "on-primary": "#002b69"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    },
-                    "fontFamily": {
-                        "headline": ["Manrope"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
+                        "outline-variant": "#40485d",
+                        "surface-container-highest": "#0b1428"
                     }
-                },
+                }
             }
         }
     </script>
 </head>
 
-<body class="bg-surface text-on-surface selection:bg-primary/30">
-    <!-- TopNavBar -->
-    <nav class="fixed top-0 w-full z-50 bg-slate-950/70 backdrop-blur-xl shadow-[0_0_40px_rgba(137,172,255,0.06)]">
-        <div class="flex justify-between items-center px-8 h-16 w-full max-w-[1920px] mx-auto">
-            <div
-                class="text-xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-headline uppercase">
-                CELESTIAL AI
+<body>
+    <!-- ═══ NAV ═══ -->
+    <nav style="position:fixed;top:0;width:100%;z-index:50;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);background:rgba(4,8,15,0.8);border-bottom:1px solid rgba(137,172,255,0.06);">
+        <div style="max-width:1440px;margin:0 auto;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    <polygon points="11,2 13.5,8.5 20.5,8.5 15,13 17,20 11,16 5,20 7,13 1.5,8.5 8.5,8.5" fill="none" stroke="#89acff" stroke-width="1.3" stroke-linejoin="round"/>
+                </svg>
+                <span class="syne" style="font-size:0.95rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:linear-gradient(90deg,#89acff,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Celestial AI</span>
             </div>
-            <div class="hidden md:flex items-center gap-8">
-                <a class="text-blue-400 border-b-2 border-blue-400 pb-1 font-manrope tracking-tight font-medium"
-                    href="#">Dashboard</a>
-                <a class="text-slate-400 hover:text-slate-200 transition-colors font-manrope tracking-tight font-medium"
-                    href="#">Predictions</a>
-                <a class="text-slate-400 hover:text-slate-200 transition-colors font-manrope tracking-tight font-medium"
-                    href="#">Segments</a>
-                <a class="text-slate-400 hover:text-slate-200 transition-colors font-manrope tracking-tight font-medium"
-                    href="#">Observatory</a>
-            </div>
-            <div class="flex items-center gap-4">
-                <button
-                    class="material-symbols-outlined text-slate-400 hover:bg-white/5 transition-all duration-300 p-2 rounded-full active:scale-95">notifications</button>
-                <button
-                    class="material-symbols-outlined text-slate-400 hover:bg-white/5 transition-all duration-300 p-2 rounded-full active:scale-95">settings</button>
-                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary"></div>
+            <div style="display:flex;align-items:center;gap:16px;">
+                <span class="nav-pill">Churn Intelligence</span>
+                <div style="display:flex;align-items:center;gap:6px;">
+                    <div class="status-dot"></div>
+                    <span style="font-size:0.72rem;color:var(--clr-muted);font-weight:500;">Model Live</span>
+                </div>
             </div>
         </div>
     </nav>
-    <main class="pt-24 pb-16 px-4 md:px-8 max-w-[1920px] mx-auto">
-        <div class="min-h-screen">
-            <div class="mb-8">
-                <h1 class="text-5xl font-extrabold text-on-surface mb-2 tracking-tight font-headline">Churn Prediction
-                    Intelligence</h1>
-                <p class="text-on-surface-variant">AI-driven customer retention analysis</p>
+
+    <!-- ═══ MAIN ═══ -->
+    <main style="padding-top:88px;padding-bottom:60px;padding-left:24px;padding-right:24px;max-width:1440px;margin:0 auto;position:relative;z-index:1;">
+
+        <!-- Header -->
+        <div style="margin-bottom:40px;">
+            <p class="eyebrow" style="margin-bottom:10px;">Telecom Analytics · Predictive Retention</p>
+            <h1 class="syne" style="font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-0.02em;margin:0 0 12px 0;">
+                Churn Prediction<br>
+                <span style="background:linear-gradient(90deg,#89acff 0%,#00d4ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Intelligence Engine</span>
+            </h1>
+            <p style="color:var(--clr-muted);font-size:0.9rem;font-weight:400;max-width:480px;line-height:1.6;">
+                Configure a customer profile and run the AI model to receive an instant churn risk score with actionable retention guidance.
+            </p>
+        </div>
+
+        <!-- Content Grid -->
+        <div style="display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start;">
+
+            <!-- ─── INPUT PANEL ─── -->
+            <div class="glass" style="padding:36px;">
+                <p class="eyebrow" style="margin-bottom:24px;">Customer Profile</p>
+
+                <!-- Row 1: Demographics -->
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;margin-bottom:20px;">
+                    <div>
+                        <label class="field-label" for="gender">Gender</label>
+                        <select id="gender">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" for="seniorCitizen">Senior Citizen</label>
+                        <select id="seniorCitizen">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" for="partner">Partner</label>
+                        <select id="partner">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" for="dependents">Dependents</label>
+                        <select id="dependents">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr class="section-divider" />
+
+                <!-- Tenure Slider -->
+                <div style="margin-bottom:24px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                        <label class="field-label" style="margin-bottom:0;">Tenure</label>
+                        <div style="display:flex;align-items:baseline;gap:4px;">
+                            <span id="tenureValue" style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:var(--clr-primary);">12</span>
+                            <span style="font-size:0.72rem;color:var(--clr-muted);">months</span>
+                        </div>
+                    </div>
+                    <input id="tenure" type="range" min="0" max="72" value="12" />
+                    <div style="display:flex;justify-content:space-between;margin-top:4px;">
+                        <span style="font-size:0.65rem;color:var(--clr-muted);">0 mo</span>
+                        <span style="font-size:0.65rem;color:var(--clr-muted);">72 mo</span>
+                    </div>
+                </div>
+
+                <hr class="section-divider" />
+
+                <!-- Row 2: Services -->
+                <p class="eyebrow" style="margin-bottom:16px;">Services</p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+                    <div>
+                        <label class="field-label" for="phoneService">Phone Service</label>
+                        <select id="phoneService">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" for="multipleLines">Multiple Lines</label>
+                        <select id="multipleLines">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No phone service">No phone service</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" for="internetService">Internet Service</label>
+                        <select id="internetService">
+                            <option value="Fiber optic">Fiber optic</option>
+                            <option value="DSL">DSL</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" for="onlineSecurity">Online Security</label>
+                        <select id="onlineSecurity">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No internet service">No internet service</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" for="onlineBackup">Online Backup</label>
+                        <select id="onlineBackup">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                            <option value="No internet service">No internet service</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" for="deviceProtection">Device Protection</label>
+                        <select id="deviceProtection">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No internet service">No internet service</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" for="techSupport">Tech Support</label>
+                        <select id="techSupport">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No internet service">No internet service</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" for="streamingTV">Streaming TV</label>
+                        <select id="streamingTV">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                            <option value="No internet service">No internet service</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" for="streamingMovies">Streaming Movies</label>
+                        <select id="streamingMovies">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No internet service">No internet service</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr class="section-divider" />
+
+                <!-- Row 3: Billing -->
+                <p class="eyebrow" style="margin-bottom:16px;">Billing & Contract</p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+                    <div>
+                        <label class="field-label" for="contract">Contract Type</label>
+                        <select id="contract">
+                            <option value="Month-to-month">Month-to-month</option>
+                            <option value="One year">One year</option>
+                            <option value="Two year">Two year</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" for="paperlessBilling">Paperless Billing</label>
+                        <select id="paperlessBilling">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div style="grid-column:1/-1;">
+                        <label class="field-label" for="paymentMethod">Payment Method</label>
+                        <select id="paymentMethod">
+                            <option value="Electronic check">Electronic check</option>
+                            <option value="Mailed check">Mailed check</option>
+                            <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
+                            <option value="Credit card (automatic)">Credit card (automatic)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Charge Sliders -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;">
+                    <div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                            <label class="field-label" style="margin-bottom:0;">Monthly Charges</label>
+                            <div style="display:flex;align-items:baseline;gap:3px;">
+                                <span style="font-size:0.65rem;color:var(--clr-muted);">$</span>
+                                <span id="monthlyChargesValue" style="font-family:'Syne',sans-serif;font-weight:700;color:var(--clr-primary);">70</span>
+                            </div>
+                        </div>
+                        <input id="monthlyCharges" type="range" min="18" max="120" value="70" />
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                            <label class="field-label" style="margin-bottom:0;">Total Charges</label>
+                            <div style="display:flex;align-items:baseline;gap:3px;">
+                                <span style="font-size:0.65rem;color:var(--clr-muted);">$</span>
+                                <span id="totalChargesValue" style="font-family:'Syne',sans-serif;font-weight:700;color:var(--clr-primary);">800</span>
+                            </div>
+                        </div>
+                        <input id="totalCharges" type="range" min="0" max="9000" value="800" />
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <button id="predictBtn" class="predict-btn" onclick="handlePredict()">
+                    Run Prediction Analysis
+                </button>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Input Form -->
-                <div class="lg:col-span-2 glass-panel beveled-edge p-10 rounded-xl border border-outline-variant/10">
-                    <h2 class="text-label-md uppercase tracking-widest text-on-surface-variant text-xs mb-10">Customer
-                        Profile Simulation</h2>
-                    <div class="space-y-8">
-                        <!-- Gender -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Gender</label>
-                            <select id="gender"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                        </div>
-                        <!-- Senior Citizen -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Senior Citizen</label>
-                            <select id="seniorCitizen"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
-                            </select>
-                        </div>
-                        <!-- Partner -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Partner</label>
-                            <select id="partner"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                        </div>
-                        <!-- Dependents -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Dependents</label>
-                            <select id="dependents"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="No">No</option>
-                                <option value="Yes">Yes</option>
-                            </select>
-                        </div>
-                        <!-- Tenure -->
-                        <div>
-                            <div class="flex justify-between items-center mb-4">
-                                <label class="text-on-surface text-sm font-semibold">Tenure (Months)</label>
-                                <span id="tenureValue" class="text-primary font-bold">12</span>
-                            </div>
-                            <input id="tenure" type="range" min="0" max="72" value="12"
-                                class="w-full" />
-                        </div>
-                        <!-- Phone Service -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Phone Service</label>
-                            <select id="phoneService"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                        </div>
-                        <!-- Multiple Lines -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Multiple Lines</label>
-                            <select id="multipleLines"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="No">No</option>
-                                <option value="Yes">Yes</option>
-                                <option value="No phone service">No phone service</option>
-                            </select>
-                        </div>
-                        <!-- Internet Service -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Internet Service</label>
-                            <select id="internetService"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="Fiber optic">Fiber optic</option>
-                                <option value="DSL">DSL</option>
-                                <option value="No">No</option>
-                            </select>
-                        </div>
-                        <!-- Online Security -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Online Security</label>
-                            <select id="onlineSecurity"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="No">No</option>
-                                <option value="Yes">Yes</option>
-                                <option value="No internet service">No internet service</option>
-                            </select>
-                        </div>
-                        <!-- Online Backup -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Online Backup</label>
-                            <select id="onlineBackup"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                                <option value="No internet service">No internet service</option>
-                            </select>
-                        </div>
-                        <!-- Device Protection -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Device Protection</label>
-                            <select id="deviceProtection"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="No">No</option>
-                                <option value="Yes">Yes</option>
-                                <option value="No internet service">No internet service</option>
-                            </select>
-                        </div>
-                        <!-- Tech Support -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Tech Support</label>
-                            <select id="techSupport"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="No">No</option>
-                                <option value="Yes">Yes</option>
-                                <option value="No internet service">No internet service</option>
-                            </select>
-                        </div>
-                        <!-- Streaming TV -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Streaming TV</label>
-                            <select id="streamingTV"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                                <option value="No internet service">No internet service</option>
-                            </select>
-                        </div>
-                        <!-- Streaming Movies -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Streaming Movies</label>
-                            <select id="streamingMovies"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="No">No</option>
-                                <option value="Yes">Yes</option>
-                                <option value="No internet service">No internet service</option>
-                            </select>
-                        </div>
-                        <!-- Contract -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Contract Type</label>
-                            <select id="contract"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="Month-to-month">Month-to-month</option>
-                                <option value="One year">One year</option>
-                                <option value="Two year">Two year</option>
-                            </select>
-                        </div>
-                        <!-- Paperless Billing -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Paperless Billing</label>
-                            <select id="paperlessBilling"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                        </div>
-                        <!-- Payment Method -->
-                        <div>
-                            <label class="block text-on-surface text-sm font-semibold mb-4">Payment Method</label>
-                            <select id="paymentMethod"
-                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
-                                <option value="Electronic check">Electronic check</option>
-                                <option value="Mailed check">Mailed check</option>
-                                <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
-                                <option value="Credit card (automatic)">Credit card (automatic)</option>
-                            </select>
-                        </div>
-                        <!-- Monthly Charges -->
-                        <div>
-                            <div class="flex justify-between items-center mb-4">
-                                <label class="text-on-surface text-sm font-semibold">Monthly Charges ($)</label>
-                                <span id="monthlyChargesValue" class="text-primary font-bold">70</span>
-                            </div>
-                            <input id="monthlyCharges" type="range" min="18" max="120" value="70"
-                                class="w-full" />
-                        </div>
-                        <!-- Total Charges -->
-                        <div>
-                            <div class="flex justify-between items-center mb-4">
-                                <label class="text-on-surface text-sm font-semibold">Total Charges ($)</label>
-                                <span id="totalChargesValue" class="text-primary font-bold">800</span>
-                            </div>
-                            <input id="totalCharges" type="range" min="0" max="9000" value="800"
-                                class="w-full" />
+
+            <!-- ─── RESULTS PANEL ─── -->
+            <div style="display:flex;flex-direction:column;gap:20px;position:sticky;top:80px;">
+
+                <!-- Gauge Card -->
+                <div id="resultPanel" class="glass" style="padding:36px;display:flex;flex-direction:column;align-items:center;text-align:center;">
+                    <p class="eyebrow" style="margin-bottom:24px;align-self:flex-start;">Churn Risk Score</p>
+
+                    <!-- Gauge -->
+                    <div style="position:relative;width:180px;height:180px;margin-bottom:20px;">
+                        <svg style="transform:rotate(-90deg);" viewBox="0 0 180 180" width="180" height="180">
+                            <circle cx="90" cy="90" r="72" stroke="rgba(137,172,255,0.07)" stroke-width="10" fill="none"/>
+                            <circle id="gaugeCircle" cx="90" cy="90" r="72"
+                                stroke="var(--clr-primary)"
+                                stroke-width="10"
+                                fill="none"
+                                stroke-linecap="round"
+                                style="stroke-dasharray:452.4;stroke-dashoffset:452.4;"
+                                class="gauge-ring"/>
+                        </svg>
+                        <!-- Center content -->
+                        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;">
+                            <span id="percentText" class="syne" style="font-size:2.2rem;font-weight:800;color:var(--clr-primary);line-height:1;transition:color 0.4s;">--</span>
+                            <span id="riskBadge" class="risk-badge idle">Ready</span>
                         </div>
                     </div>
-                    <!-- Submit Button -->
-                    <button id="predictBtn" onclick="handlePredict()"
-                        class="mt-10 w-full bg-gradient-to-r from-primary to-secondary text-white font-bold py-4 px-8 rounded-lg hover:shadow-[0_0_40px_rgba(137,172,255,0.3)] transition-all duration-300 active:scale-[0.98] text-lg uppercase tracking-wider">
-                        Run Prediction Analysis
-                    </button>
+
+                    <!-- Result message -->
+                    <div id="resultMessage" class="glass-inner" style="width:100%;padding:16px;text-align:left;">
+                        <p style="font-size:0.82rem;color:var(--clr-muted);line-height:1.65;margin:0;">
+                            Configure customer parameters and click <span style="color:var(--clr-primary);font-weight:600;">Run Prediction</span> to analyze churn risk.
+                        </p>
+                    </div>
                 </div>
-                <!-- Results Panel -->
-                <div class="space-y-8">
-                    <!-- Risk Gauge -->
-                    <div id="resultPanel"
-                        class="glass-panel beveled-edge p-10 rounded-xl border border-outline-variant/10 flex flex-col items-center justify-center min-h-[400px]">
-                        <h3 class="text-label-md uppercase tracking-widest text-on-surface-variant text-xs mb-8">Churn
-                            Risk Score</h3>
-                        <div class="relative w-48 h-48 mb-8">
-                            <svg class="transform -rotate-90" viewBox="0 0 200 200">
-                                <circle cx="100" cy="100" r="80" stroke="rgba(25, 37, 64, 0.3)" stroke-width="12"
-                                    fill="none" />
-                                <circle id="gaugeCircle" cx="100" cy="100" r="80" stroke="#89acff" stroke-width="12"
-                                    fill="none" stroke-linecap="round"
-                                    style="stroke-dasharray: 502.4; stroke-dashoffset: 502.4;"
-                                    class="gauge-circle" />
-                            </svg>
-                            <div
-                                class="absolute inset-0 flex flex-col items-center justify-center">
-                                <div id="percentText" class="text-4xl font-extrabold text-primary result-text">--</div>
-                                <div id="riskLabel" class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-2">READY</div>
+
+                <!-- Key Drivers Card -->
+                <div id="insightPanel" class="glass" style="padding:28px;">
+                    <p class="eyebrow" style="margin-bottom:18px;">Key Churn Drivers</p>
+                    <div id="insightContent" style="display:flex;flex-direction:column;gap:10px;">
+                        <div class="insight-card">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                                <span class="material-symbols-outlined" style="color:var(--clr-primary);font-size:0.9rem;">contract</span>
+                                <span style="font-size:0.78rem;font-weight:600;color:var(--clr-text);">Contract Type</span>
                             </div>
+                            <p style="font-size:0.75rem;color:var(--clr-muted);margin:0;line-height:1.55;">Month-to-month contracts are the strongest predictor of attrition — 3× higher churn vs. annual plans.</p>
                         </div>
-                        <div id="resultMessage"
-                            class="w-full bg-primary/10 border border-primary/20 rounded-lg p-6 text-center">
-                            <div class="text-sm text-on-surface leading-relaxed">
-                                Configure customer parameters and click <span class="font-bold text-primary">Run Prediction</span> to analyze churn risk.
+                        <div class="insight-card">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                                <span class="material-symbols-outlined" style="color:var(--clr-primary);font-size:0.9rem;">security</span>
+                                <span style="font-size:0.78rem;font-weight:600;color:var(--clr-text);">Online Security</span>
                             </div>
+                            <p style="font-size:0.75rem;color:var(--clr-muted);margin:0;line-height:1.55;">Customers without online security churn at nearly 2× the rate of protected subscribers.</p>
                         </div>
-                    </div>
-                    <!-- AI Insight -->
-                    <div
-                        class="glass-panel beveled-edge p-8 rounded-xl border border-outline-variant/10">
-                        <h3 class="text-label-md uppercase tracking-widest text-on-surface-variant text-xs mb-6">AI
-                            Strategic Insight</h3>
-                        <div class="text-sm text-on-surface-variant leading-relaxed">
-                            "The month-to-month contract type is the strongest predictor of attrition. Consider
-                            offering incentives for annual renewals."
-                        </div>
-                    </div>
-                    <!-- Model Health Chart -->
-                    <div
-                        class="glass-panel beveled-edge p-8 rounded-xl border border-outline-variant/10 h-[300px] flex flex-col relative overflow-hidden">
-                        <h3 class="text-label-md uppercase tracking-widest text-on-surface-variant text-xs mb-8">
-                            Prediction Accuracy (ROC-AUC)</h3>
-                        <div class="flex-1 relative">
-                            <div class="absolute inset-0 flex items-end justify-between px-2 gap-1">
-                                <div class="w-2 bg-primary/20 rounded-t h-1/2"></div>
-                                <div class="w-2 bg-primary/20 rounded-t h-2/3"></div>
-                                <div class="w-2 bg-primary/20 rounded-t h-3/4"></div>
-                                <div class="w-2 bg-primary/20 rounded-t h-1/2"></div>
-                                <div class="w-2 bg-primary/20 rounded-t h-3/5"></div>
-                                <div class="w-2 bg-primary/40 rounded-t h-4/5"></div>
-                                <div class="w-2 bg-primary/60 rounded-t h-5/6"></div>
-                                <div
-                                    class="w-2 bg-primary rounded-t h-[92%] shadow-[0_0_15px_rgba(137,172,255,0.4)]">
-                                </div>
+                        <div class="insight-card">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                                <span class="material-symbols-outlined" style="color:var(--clr-primary);font-size:0.9rem;">schedule</span>
+                                <span style="font-size:0.78rem;font-weight:600;color:var(--clr-text);">Tenure Length</span>
                             </div>
-                            <div class="absolute top-0 right-0">
-                                <div class="text-2xl font-headline font-extrabold text-primary">0.942</div>
-                                <div class="text-[10px] font-bold text-on-surface-variant text-right uppercase">
-                                    Real-time Performance</div>
-                            </div>
+                            <p style="font-size:0.75rem;color:var(--clr-muted);margin:0;line-height:1.55;">First 12 months is the critical window — 60% of churn happens in year one.</p>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- Footer Stats -->
-            <div class="mt-8 grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="glass-panel p-6 rounded-xl border border-outline-variant/10 text-center">
-                    <div class="text-2xl font-bold text-on-surface">12,408</div>
-                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Total Customers</div>
-                </div>
-                <div class="glass-panel p-6 rounded-xl border border-outline-variant/10 text-center">
-                    <div class="text-2xl font-bold text-error">15.2%</div>
-                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Current Churn Rate
-                    </div>
-                </div>
-                <div class="glass-panel p-6 rounded-xl border border-outline-variant/10 text-center">
-                    <div class="text-2xl font-bold text-tertiary">$1.2M</div>
-                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">At-Risk Revenue</div>
-                </div>
-                <div class="glass-panel p-6 rounded-xl border border-outline-variant/10 text-center">
-                    <div class="text-2xl font-bold text-primary">89%</div>
-                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Prevention Success
-                    </div>
-                </div>
+
             </div>
         </div>
     </main>
-    <!-- FAB Action -->
-    <button
-        class="fixed bottom-8 right-8 h-14 w-14 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center shadow-xl active:scale-95 transition-all z-50 group">
-        <span class="material-symbols-outlined text-on-primary">add</span>
-        <div
-            class="absolute right-16 px-4 py-2 bg-surface-container rounded-lg border border-outline-variant/20 text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-            New Customer Simulation
-        </div>
-    </button>
 
     <script>
         const API_URL = "https://customer-churn-t1b4.onrender.com/predict";
 
-        // ==============================
-        // 🎛️ SLIDER SYNC
-        // ==============================
-        document.getElementById('tenure').addEventListener('input', (e) => {
+        // ── Slider sync ──
+        document.getElementById('tenure').addEventListener('input', e => {
             document.getElementById('tenureValue').textContent = e.target.value;
         });
-
-        document.getElementById('monthlyCharges').addEventListener('input', (e) => {
+        document.getElementById('monthlyCharges').addEventListener('input', e => {
             document.getElementById('monthlyChargesValue').textContent = e.target.value;
         });
-
-        document.getElementById('totalCharges').addEventListener('input', (e) => {
+        document.getElementById('totalCharges').addEventListener('input', e => {
             document.getElementById('totalChargesValue').textContent = e.target.value;
         });
 
-        // ==============================
-        // 🔹 GET INPUT DATA
-        // ==============================
+        // ── Collect form data ──
         function getInputData() {
             return {
                 gender: document.getElementById('gender').value,
@@ -541,131 +642,117 @@
             };
         }
 
-        // ==============================
-        // 🔹 CALL API
-        // ==============================
+        // ── API call ──
         async function callAPI(data) {
             const response = await fetch(API_URL, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)
             });
-
-            if (!response.ok) {
-                throw new Error(`API Error: ${response.status}`);
-            }
-
+            if (!response.ok) throw new Error(`API Error: ${response.status}`);
             return await response.json();
         }
 
-        // ==============================
-        // 🔹 UPDATE UI
-        // ==============================
+        // ── Update UI ──
         function updateUI(probability) {
-            const percentValue = (probability * 100).toFixed(1);
+            const pct = (probability * 100).toFixed(1);
             const gaugeCircle = document.getElementById('gaugeCircle');
             const percentText = document.getElementById('percentText');
-            const riskLabel = document.getElementById('riskLabel');
-            const resultMessage = document.getElementById('resultMessage');
+            const riskBadge   = document.getElementById('riskBadge');
+            const resultMsg   = document.getElementById('resultMessage');
             const resultPanel = document.getElementById('resultPanel');
 
-            // Remove analyzing state
-            resultPanel.classList.remove('analyzing');
+            resultPanel.classList.remove('analyzing-state');
 
-            // Calculate gauge offset (502.4 is circumference)
-            const offset = 502.4 - (percentValue / 100) * 502.4;
+            // Circumference = 2πr = 2π×72 ≈ 452.4
+            const circumference = 452.4;
+            const offset = circumference - (parseFloat(pct) / 100) * circumference;
             gaugeCircle.style.strokeDashoffset = offset;
 
-            // Update percentage text
-            percentText.textContent = percentValue + '%';
-
-            // Determine risk level
-            if (percentValue > 50) {
+            if (parseFloat(pct) > 50) {
                 // HIGH RISK
-                gaugeCircle.style.stroke = '#ff716c';
-                percentText.className = 'text-4xl font-extrabold text-error result-text';
-                riskLabel.textContent = 'HIGH RISK';
-                riskLabel.className = 'text-[10px] font-bold text-error uppercase tracking-widest mt-2';
-                resultMessage.className = 'w-full bg-error/10 border border-error/20 rounded-lg p-6 text-center';
-                resultMessage.innerHTML = `
-                    <div class="text-sm text-on-surface leading-relaxed">
-                        <span class="font-bold text-error">⚠️ Alert:</span> This customer profile shows a <span class="font-bold">${percentValue}%</span> probability of churn. Immediate retention action recommended.
+                gaugeCircle.style.stroke = 'var(--clr-danger)';
+                percentText.style.color   = 'var(--clr-danger)';
+                riskBadge.className       = 'risk-badge high';
+                riskBadge.textContent     = '⚠ High Risk';
+                resultMsg.innerHTML = `
+                    <div class="animate-in" style="display:flex;flex-direction:column;gap:6px;">
+                        <p style="font-size:0.78rem;font-weight:600;color:var(--clr-danger);margin:0;">Immediate Action Recommended</p>
+                        <p style="font-size:0.8rem;color:var(--clr-muted);margin:0;line-height:1.6;">
+                            This profile carries a <strong style="color:var(--clr-text);">${pct}%</strong> probability of churn.
+                            Prioritize personal outreach, contract upgrade incentive, or loyalty offer within 7 days.
+                        </p>
                     </div>
                 `;
             } else {
                 // LOW RISK
-                gaugeCircle.style.stroke = '#10b981';
-                percentText.className = 'text-4xl font-extrabold text-green-400 result-text';
-                riskLabel.textContent = 'LOW RISK';
-                riskLabel.className = 'text-[10px] font-bold text-green-400 uppercase tracking-widest mt-2';
-                resultMessage.className = 'w-full bg-green-500/10 border border-green-500/20 rounded-lg p-6 text-center';
-                resultMessage.innerHTML = `
-                    <div class="text-sm text-on-surface leading-relaxed">
-                        <span class="font-bold text-green-400">✓ Stable:</span> This customer profile shows only a <span class="font-bold">${percentValue}%</span> churn probability. Continue standard engagement protocols.
+                gaugeCircle.style.stroke = 'var(--clr-success)';
+                percentText.style.color   = 'var(--clr-success)';
+                riskBadge.className       = 'risk-badge low';
+                riskBadge.textContent     = '✓ Low Risk';
+                resultMsg.innerHTML = `
+                    <div class="animate-in" style="display:flex;flex-direction:column;gap:6px;">
+                        <p style="font-size:0.78rem;font-weight:600;color:var(--clr-success);margin:0;">Profile Stable</p>
+                        <p style="font-size:0.8rem;color:var(--clr-muted);margin:0;line-height:1.6;">
+                            Churn probability is <strong style="color:var(--clr-text);">${pct}%</strong> — within healthy range.
+                            Continue standard engagement and monitor monthly charges for drift.
+                        </p>
                     </div>
                 `;
             }
+
+            percentText.textContent = pct + '%';
         }
 
-        // ==============================
-        // 🔹 HANDLE PREDICT BUTTON
-        // ==============================
+        // ── Handle predict ──
         async function handlePredict() {
-            const predictBtn = document.getElementById('predictBtn');
-            const resultPanel = document.getElementById('resultPanel');
+            const btn         = document.getElementById('predictBtn');
+            const gaugeCircle = document.getElementById('gaugeCircle');
             const percentText = document.getElementById('percentText');
-            const riskLabel = document.getElementById('riskLabel');
-            const resultMessage = document.getElementById('resultMessage');
+            const riskBadge   = document.getElementById('riskBadge');
+            const resultMsg   = document.getElementById('resultMessage');
+            const resultPanel = document.getElementById('resultPanel');
 
             try {
-                // Set loading state
-                predictBtn.disabled = true;
-                predictBtn.textContent = 'ANALYZING...';
-                resultPanel.classList.add('analyzing');
-                
-                percentText.textContent = '...';
-                riskLabel.textContent = 'ANALYZING';
-                riskLabel.className = 'text-[10px] font-bold text-primary uppercase tracking-widest mt-2';
-                resultMessage.className = 'w-full bg-primary/10 border border-primary/20 rounded-lg p-6 text-center';
-                resultMessage.innerHTML = `
-                    <div class="text-sm text-on-surface leading-relaxed">
-                        Processing customer data through AI model...
-                    </div>
+                btn.disabled      = true;
+                btn.textContent   = 'Analyzing…';
+                resultPanel.classList.add('analyzing-state');
+
+                gaugeCircle.style.stroke        = 'var(--clr-primary)';
+                gaugeCircle.style.strokeDashoffset = 452.4;
+                percentText.textContent          = '…';
+                percentText.style.color          = 'var(--clr-primary)';
+                riskBadge.className              = 'risk-badge loading';
+                riskBadge.textContent            = 'Analyzing';
+                resultMsg.innerHTML              = `
+                    <p style="font-size:0.82rem;color:var(--clr-muted);margin:0;line-height:1.65;">
+                        Processing customer profile through the AI model…
+                    </p>
                 `;
 
-                // Get input data
-                const inputData = getInputData();
-
-                // Call API
-                const result = await callAPI(inputData);
-
-                // Update UI with results
+                const data   = getInputData();
+                const result = await callAPI(data);
                 updateUI(result.probability);
 
-            } catch (error) {
-                // Error handling
-                console.error('Prediction error:', error);
-                resultPanel.classList.remove('analyzing');
-                
-                percentText.textContent = 'ERR';
-                percentText.className = 'text-4xl font-extrabold text-error result-text';
-                riskLabel.textContent = 'ERROR';
-                riskLabel.className = 'text-[10px] font-bold text-error uppercase tracking-widest mt-2';
-                resultMessage.className = 'w-full bg-error/10 border border-error/20 rounded-lg p-6 text-center';
-                resultMessage.innerHTML = `
-                    <div class="text-sm text-on-surface leading-relaxed">
-                        <span class="font-bold text-error">⚠️ Server Unavailable:</span> Unable to connect to prediction API. Please check your connection and try again.
-                    </div>
+            } catch (err) {
+                console.error('Prediction error:', err);
+                resultPanel.classList.remove('analyzing-state');
+
+                gaugeCircle.style.stroke  = 'var(--clr-danger)';
+                percentText.textContent   = '!';
+                percentText.style.color   = 'var(--clr-danger)';
+                riskBadge.className       = 'risk-badge high';
+                riskBadge.textContent     = 'Error';
+                resultMsg.innerHTML       = `
+                    <p style="font-size:0.82rem;color:var(--clr-muted);margin:0;line-height:1.65;">
+                        <span style="color:var(--clr-danger);font-weight:600;">Connection failed.</span> Unable to reach the prediction API. Please verify your connection and retry.
+                    </p>
                 `;
             } finally {
-                // Reset button
-                predictBtn.disabled = false;
-                predictBtn.textContent = 'RUN PREDICTION ANALYSIS';
+                btn.disabled    = false;
+                btn.textContent = 'Run Prediction Analysis';
             }
         }
     </script>
 </body>
-
 </html>
