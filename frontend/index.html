@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CELESTIAL AI | Churn Intelligence</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #060e20;
+            color: #37393e;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .font-headline {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(15, 25, 48, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .glow-primary {
+            box-shadow: 0 0 40px rgba(137, 172, 255, 0.06);
+        }
+
+        .beveled-edge {
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: #192540;
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #89acff;
+            cursor: pointer;
+            border: 2px solid #060e20;
+            box-shadow: 0 0 10px rgba(137, 172, 255, 0.5);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #89acff;
+            cursor: pointer;
+            border: none;
+        }
+
+        .gauge-circle {
+            transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .result-text {
+            transition: all 0.4s ease;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 40px rgba(137, 172, 255, 0.2); }
+            50% { box-shadow: 0 0 60px rgba(137, 172, 255, 0.4); }
+        }
+
+        .analyzing {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-dim": "#126ef1",
+                        "on-surface": "#dee5ff",
+                        "surface": "#060e20",
+                        "on-secondary-container": "#ebd8ff",
+                        "tertiary-container": "#00eefc",
+                        "surface-tint": "#89acff",
+                        "tertiary-fixed-dim": "#00deec",
+                        "primary-container": "#729eff",
+                        "tertiary-fixed": "#00eefc",
+                        "surface-container": "#0f1930",
+                        "surface-container-lowest": "#000000",
+                        "tertiary-dim": "#00deec",
+                        "inverse-primary": "#0059ca",
+                        "primary-fixed": "#729eff",
+                        "error-container": "#9f0519",
+                        "on-error-container": "#ffa8a3",
+                        "secondary-fixed": "#e1c7ff",
+                        "on-secondary": "#2f0060",
+                        "inverse-surface": "#faf8ff",
+                        "on-secondary-fixed-variant": "#6f08d0",
+                        "on-surface-variant": "#a3aac4",
+                        "outline": "#6d758c",
+                        "surface-container-highest": "#192540",
+                        "on-background": "#dee5ff",
+                        "on-tertiary-fixed": "#003f43",
+                        "secondary-container": "#6e06d0",
+                        "on-secondary-fixed": "#4a0090",
+                        "outline-variant": "#40485d",
+                        "inverse-on-surface": "#4d556b",
+                        "tertiary": "#8ff5ff",
+                        "on-tertiary-container": "#005359",
+                        "on-primary-fixed-variant": "#002965",
+                        "surface-dim": "#060e20",
+                        "background": "#060e20",
+                        "on-tertiary-fixed-variant": "#005e64",
+                        "surface-bright": "#1f2b49",
+                        "error-dim": "#d7383b",
+                        "on-primary-fixed": "#000000",
+                        "on-primary-container": "#002052",
+                        "on-error": "#490006",
+                        "primary-fixed-dim": "#5990ff",
+                        "surface-variant": "#192540",
+                        "surface-container-high": "#141f38",
+                        "secondary-dim": "#9547f7",
+                        "secondary": "#b884ff",
+                        "primary": "#89acff",
+                        "on-tertiary": "#005d63",
+                        "secondary-fixed-dim": "#d6b6ff",
+                        "surface-container-low": "#091328",
+                        "error": "#ff716c",
+                        "on-primary": "#002b69"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-surface text-on-surface selection:bg-primary/30">
+    <!-- TopNavBar -->
+    <nav class="fixed top-0 w-full z-50 bg-slate-950/70 backdrop-blur-xl shadow-[0_0_40px_rgba(137,172,255,0.06)]">
+        <div class="flex justify-between items-center px-8 h-16 w-full max-w-[1920px] mx-auto">
+            <div
+                class="text-xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-headline uppercase">
+                CELESTIAL AI
+            </div>
+            <div class="hidden md:flex items-center gap-8">
+                <a class="text-blue-400 border-b-2 border-blue-400 pb-1 font-manrope tracking-tight font-medium"
+                    href="#">Dashboard</a>
+                <a class="text-slate-400 hover:text-slate-200 transition-colors font-manrope tracking-tight font-medium"
+                    href="#">Predictions</a>
+                <a class="text-slate-400 hover:text-slate-200 transition-colors font-manrope tracking-tight font-medium"
+                    href="#">Segments</a>
+                <a class="text-slate-400 hover:text-slate-200 transition-colors font-manrope tracking-tight font-medium"
+                    href="#">Observatory</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <button
+                    class="material-symbols-outlined text-slate-400 hover:bg-white/5 transition-all duration-300 p-2 rounded-full active:scale-95">notifications</button>
+                <button
+                    class="material-symbols-outlined text-slate-400 hover:bg-white/5 transition-all duration-300 p-2 rounded-full active:scale-95">settings</button>
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary"></div>
+            </div>
+        </div>
+    </nav>
+    <main class="pt-24 pb-16 px-4 md:px-8 max-w-[1920px] mx-auto">
+        <div class="min-h-screen">
+            <div class="mb-8">
+                <h1 class="text-5xl font-extrabold text-on-surface mb-2 tracking-tight font-headline">Churn Prediction
+                    Intelligence</h1>
+                <p class="text-on-surface-variant">AI-driven customer retention analysis</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Input Form -->
+                <div class="lg:col-span-2 glass-panel beveled-edge p-10 rounded-xl border border-outline-variant/10">
+                    <h2 class="text-label-md uppercase tracking-widest text-on-surface-variant text-xs mb-10">Customer
+                        Profile Simulation</h2>
+                    <div class="space-y-8">
+                        <!-- Gender -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Gender</label>
+                            <select id="gender"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        <!-- Senior Citizen -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Senior Citizen</label>
+                            <select id="seniorCitizen"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                        <!-- Partner -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Partner</label>
+                            <select id="partner"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <!-- Dependents -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Dependents</label>
+                            <select id="dependents"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
+                        <!-- Tenure -->
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <label class="text-on-surface text-sm font-semibold">Tenure (Months)</label>
+                                <span id="tenureValue" class="text-primary font-bold">12</span>
+                            </div>
+                            <input id="tenure" type="range" min="0" max="72" value="12"
+                                class="w-full" />
+                        </div>
+                        <!-- Phone Service -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Phone Service</label>
+                            <select id="phoneService"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <!-- Multiple Lines -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Multiple Lines</label>
+                            <select id="multipleLines"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No phone service">No phone service</option>
+                            </select>
+                        </div>
+                        <!-- Internet Service -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Internet Service</label>
+                            <select id="internetService"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="Fiber optic">Fiber optic</option>
+                                <option value="DSL">DSL</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <!-- Online Security -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Online Security</label>
+                            <select id="onlineSecurity"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No internet service">No internet service</option>
+                            </select>
+                        </div>
+                        <!-- Online Backup -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Online Backup</label>
+                            <select id="onlineBackup"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                                <option value="No internet service">No internet service</option>
+                            </select>
+                        </div>
+                        <!-- Device Protection -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Device Protection</label>
+                            <select id="deviceProtection"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No internet service">No internet service</option>
+                            </select>
+                        </div>
+                        <!-- Tech Support -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Tech Support</label>
+                            <select id="techSupport"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No internet service">No internet service</option>
+                            </select>
+                        </div>
+                        <!-- Streaming TV -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Streaming TV</label>
+                            <select id="streamingTV"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                                <option value="No internet service">No internet service</option>
+                            </select>
+                        </div>
+                        <!-- Streaming Movies -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Streaming Movies</label>
+                            <select id="streamingMovies"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No internet service">No internet service</option>
+                            </select>
+                        </div>
+                        <!-- Contract -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Contract Type</label>
+                            <select id="contract"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="Month-to-month">Month-to-month</option>
+                                <option value="One year">One year</option>
+                                <option value="Two year">Two year</option>
+                            </select>
+                        </div>
+                        <!-- Paperless Billing -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Paperless Billing</label>
+                            <select id="paperlessBilling"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <!-- Payment Method -->
+                        <div>
+                            <label class="block text-on-surface text-sm font-semibold mb-4">Payment Method</label>
+                            <select id="paymentMethod"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg p-3 text-on-surface">
+                                <option value="Electronic check">Electronic check</option>
+                                <option value="Mailed check">Mailed check</option>
+                                <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
+                                <option value="Credit card (automatic)">Credit card (automatic)</option>
+                            </select>
+                        </div>
+                        <!-- Monthly Charges -->
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <label class="text-on-surface text-sm font-semibold">Monthly Charges ($)</label>
+                                <span id="monthlyChargesValue" class="text-primary font-bold">70</span>
+                            </div>
+                            <input id="monthlyCharges" type="range" min="18" max="120" value="70"
+                                class="w-full" />
+                        </div>
+                        <!-- Total Charges -->
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <label class="text-on-surface text-sm font-semibold">Total Charges ($)</label>
+                                <span id="totalChargesValue" class="text-primary font-bold">800</span>
+                            </div>
+                            <input id="totalCharges" type="range" min="0" max="9000" value="800"
+                                class="w-full" />
+                        </div>
+                    </div>
+                    <!-- Submit Button -->
+                    <button id="predictBtn" onclick="handlePredict()"
+                        class="mt-10 w-full bg-gradient-to-r from-primary to-secondary text-white font-bold py-4 px-8 rounded-lg hover:shadow-[0_0_40px_rgba(137,172,255,0.3)] transition-all duration-300 active:scale-[0.98] text-lg uppercase tracking-wider">
+                        Run Prediction Analysis
+                    </button>
+                </div>
+                <!-- Results Panel -->
+                <div class="space-y-8">
+                    <!-- Risk Gauge -->
+                    <div id="resultPanel"
+                        class="glass-panel beveled-edge p-10 rounded-xl border border-outline-variant/10 flex flex-col items-center justify-center min-h-[400px]">
+                        <h3 class="text-label-md uppercase tracking-widest text-on-surface-variant text-xs mb-8">Churn
+                            Risk Score</h3>
+                        <div class="relative w-48 h-48 mb-8">
+                            <svg class="transform -rotate-90" viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="80" stroke="rgba(25, 37, 64, 0.3)" stroke-width="12"
+                                    fill="none" />
+                                <circle id="gaugeCircle" cx="100" cy="100" r="80" stroke="#89acff" stroke-width="12"
+                                    fill="none" stroke-linecap="round"
+                                    style="stroke-dasharray: 502.4; stroke-dashoffset: 502.4;"
+                                    class="gauge-circle" />
+                            </svg>
+                            <div
+                                class="absolute inset-0 flex flex-col items-center justify-center">
+                                <div id="percentText" class="text-4xl font-extrabold text-primary result-text">--</div>
+                                <div id="riskLabel" class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-2">READY</div>
+                            </div>
+                        </div>
+                        <div id="resultMessage"
+                            class="w-full bg-primary/10 border border-primary/20 rounded-lg p-6 text-center">
+                            <div class="text-sm text-on-surface leading-relaxed">
+                                Configure customer parameters and click <span class="font-bold text-primary">Run Prediction</span> to analyze churn risk.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- AI Insight -->
+                    <div
+                        class="glass-panel beveled-edge p-8 rounded-xl border border-outline-variant/10">
+                        <h3 class="text-label-md uppercase tracking-widest text-on-surface-variant text-xs mb-6">AI
+                            Strategic Insight</h3>
+                        <div class="text-sm text-on-surface-variant leading-relaxed">
+                            "The month-to-month contract type is the strongest predictor of attrition. Consider
+                            offering incentives for annual renewals."
+                        </div>
+                    </div>
+                    <!-- Model Health Chart -->
+                    <div
+                        class="glass-panel beveled-edge p-8 rounded-xl border border-outline-variant/10 h-[300px] flex flex-col relative overflow-hidden">
+                        <h3 class="text-label-md uppercase tracking-widest text-on-surface-variant text-xs mb-8">
+                            Prediction Accuracy (ROC-AUC)</h3>
+                        <div class="flex-1 relative">
+                            <div class="absolute inset-0 flex items-end justify-between px-2 gap-1">
+                                <div class="w-2 bg-primary/20 rounded-t h-1/2"></div>
+                                <div class="w-2 bg-primary/20 rounded-t h-2/3"></div>
+                                <div class="w-2 bg-primary/20 rounded-t h-3/4"></div>
+                                <div class="w-2 bg-primary/20 rounded-t h-1/2"></div>
+                                <div class="w-2 bg-primary/20 rounded-t h-3/5"></div>
+                                <div class="w-2 bg-primary/40 rounded-t h-4/5"></div>
+                                <div class="w-2 bg-primary/60 rounded-t h-5/6"></div>
+                                <div
+                                    class="w-2 bg-primary rounded-t h-[92%] shadow-[0_0_15px_rgba(137,172,255,0.4)]">
+                                </div>
+                            </div>
+                            <div class="absolute top-0 right-0">
+                                <div class="text-2xl font-headline font-extrabold text-primary">0.942</div>
+                                <div class="text-[10px] font-bold text-on-surface-variant text-right uppercase">
+                                    Real-time Performance</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Stats -->
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="glass-panel p-6 rounded-xl border border-outline-variant/10 text-center">
+                    <div class="text-2xl font-bold text-on-surface">12,408</div>
+                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Total Customers</div>
+                </div>
+                <div class="glass-panel p-6 rounded-xl border border-outline-variant/10 text-center">
+                    <div class="text-2xl font-bold text-error">15.2%</div>
+                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Current Churn Rate
+                    </div>
+                </div>
+                <div class="glass-panel p-6 rounded-xl border border-outline-variant/10 text-center">
+                    <div class="text-2xl font-bold text-tertiary">$1.2M</div>
+                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">At-Risk Revenue</div>
+                </div>
+                <div class="glass-panel p-6 rounded-xl border border-outline-variant/10 text-center">
+                    <div class="text-2xl font-bold text-primary">89%</div>
+                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Prevention Success
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- FAB Action -->
+    <button
+        class="fixed bottom-8 right-8 h-14 w-14 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center shadow-xl active:scale-95 transition-all z-50 group">
+        <span class="material-symbols-outlined text-on-primary">add</span>
+        <div
+            class="absolute right-16 px-4 py-2 bg-surface-container rounded-lg border border-outline-variant/20 text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            New Customer Simulation
+        </div>
+    </button>
+
+    <script>
+        const API_URL = "https://customer-churn-t1b4.onrender.com/predict";
+
+        // ==============================
+        // 🎛️ SLIDER SYNC
+        // ==============================
+        document.getElementById('tenure').addEventListener('input', (e) => {
+            document.getElementById('tenureValue').textContent = e.target.value;
+        });
+
+        document.getElementById('monthlyCharges').addEventListener('input', (e) => {
+            document.getElementById('monthlyChargesValue').textContent = e.target.value;
+        });
+
+        document.getElementById('totalCharges').addEventListener('input', (e) => {
+            document.getElementById('totalChargesValue').textContent = e.target.value;
+        });
+
+        // ==============================
+        // 🔹 GET INPUT DATA
+        // ==============================
+        function getInputData() {
+            return {
+                gender: document.getElementById('gender').value,
+                SeniorCitizen: parseInt(document.getElementById('seniorCitizen').value),
+                Partner: document.getElementById('partner').value,
+                Dependents: document.getElementById('dependents').value,
+                tenure: parseInt(document.getElementById('tenure').value),
+                PhoneService: document.getElementById('phoneService').value,
+                MultipleLines: document.getElementById('multipleLines').value,
+                InternetService: document.getElementById('internetService').value,
+                OnlineSecurity: document.getElementById('onlineSecurity').value,
+                OnlineBackup: document.getElementById('onlineBackup').value,
+                DeviceProtection: document.getElementById('deviceProtection').value,
+                TechSupport: document.getElementById('techSupport').value,
+                StreamingTV: document.getElementById('streamingTV').value,
+                StreamingMovies: document.getElementById('streamingMovies').value,
+                Contract: document.getElementById('contract').value,
+                PaperlessBilling: document.getElementById('paperlessBilling').value,
+                PaymentMethod: document.getElementById('paymentMethod').value,
+                MonthlyCharges: parseFloat(document.getElementById('monthlyCharges').value),
+                TotalCharges: parseFloat(document.getElementById('totalCharges').value)
+            };
+        }
+
+        // ==============================
+        // 🔹 CALL API
+        // ==============================
+        async function callAPI(data) {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status}`);
+            }
+
+            return await response.json();
+        }
+
+        // ==============================
+        // 🔹 UPDATE UI
+        // ==============================
+        function updateUI(probability) {
+            const percentValue = (probability * 100).toFixed(1);
+            const gaugeCircle = document.getElementById('gaugeCircle');
+            const percentText = document.getElementById('percentText');
+            const riskLabel = document.getElementById('riskLabel');
+            const resultMessage = document.getElementById('resultMessage');
+            const resultPanel = document.getElementById('resultPanel');
+
+            // Remove analyzing state
+            resultPanel.classList.remove('analyzing');
+
+            // Calculate gauge offset (502.4 is circumference)
+            const offset = 502.4 - (percentValue / 100) * 502.4;
+            gaugeCircle.style.strokeDashoffset = offset;
+
+            // Update percentage text
+            percentText.textContent = percentValue + '%';
+
+            // Determine risk level
+            if (percentValue > 50) {
+                // HIGH RISK
+                gaugeCircle.style.stroke = '#ff716c';
+                percentText.className = 'text-4xl font-extrabold text-error result-text';
+                riskLabel.textContent = 'HIGH RISK';
+                riskLabel.className = 'text-[10px] font-bold text-error uppercase tracking-widest mt-2';
+                resultMessage.className = 'w-full bg-error/10 border border-error/20 rounded-lg p-6 text-center';
+                resultMessage.innerHTML = `
+                    <div class="text-sm text-on-surface leading-relaxed">
+                        <span class="font-bold text-error">⚠️ Alert:</span> This customer profile shows a <span class="font-bold">${percentValue}%</span> probability of churn. Immediate retention action recommended.
+                    </div>
+                `;
+            } else {
+                // LOW RISK
+                gaugeCircle.style.stroke = '#10b981';
+                percentText.className = 'text-4xl font-extrabold text-green-400 result-text';
+                riskLabel.textContent = 'LOW RISK';
+                riskLabel.className = 'text-[10px] font-bold text-green-400 uppercase tracking-widest mt-2';
+                resultMessage.className = 'w-full bg-green-500/10 border border-green-500/20 rounded-lg p-6 text-center';
+                resultMessage.innerHTML = `
+                    <div class="text-sm text-on-surface leading-relaxed">
+                        <span class="font-bold text-green-400">✓ Stable:</span> This customer profile shows only a <span class="font-bold">${percentValue}%</span> churn probability. Continue standard engagement protocols.
+                    </div>
+                `;
+            }
+        }
+
+        // ==============================
+        // 🔹 HANDLE PREDICT BUTTON
+        // ==============================
+        async function handlePredict() {
+            const predictBtn = document.getElementById('predictBtn');
+            const resultPanel = document.getElementById('resultPanel');
+            const percentText = document.getElementById('percentText');
+            const riskLabel = document.getElementById('riskLabel');
+            const resultMessage = document.getElementById('resultMessage');
+
+            try {
+                // Set loading state
+                predictBtn.disabled = true;
+                predictBtn.textContent = 'ANALYZING...';
+                resultPanel.classList.add('analyzing');
+                
+                percentText.textContent = '...';
+                riskLabel.textContent = 'ANALYZING';
+                riskLabel.className = 'text-[10px] font-bold text-primary uppercase tracking-widest mt-2';
+                resultMessage.className = 'w-full bg-primary/10 border border-primary/20 rounded-lg p-6 text-center';
+                resultMessage.innerHTML = `
+                    <div class="text-sm text-on-surface leading-relaxed">
+                        Processing customer data through AI model...
+                    </div>
+                `;
+
+                // Get input data
+                const inputData = getInputData();
+
+                // Call API
+                const result = await callAPI(inputData);
+
+                // Update UI with results
+                updateUI(result.probability);
+
+            } catch (error) {
+                // Error handling
+                console.error('Prediction error:', error);
+                resultPanel.classList.remove('analyzing');
+                
+                percentText.textContent = 'ERR';
+                percentText.className = 'text-4xl font-extrabold text-error result-text';
+                riskLabel.textContent = 'ERROR';
+                riskLabel.className = 'text-[10px] font-bold text-error uppercase tracking-widest mt-2';
+                resultMessage.className = 'w-full bg-error/10 border border-error/20 rounded-lg p-6 text-center';
+                resultMessage.innerHTML = `
+                    <div class="text-sm text-on-surface leading-relaxed">
+                        <span class="font-bold text-error">⚠️ Server Unavailable:</span> Unable to connect to prediction API. Please check your connection and try again.
+                    </div>
+                `;
+            } finally {
+                // Reset button
+                predictBtn.disabled = false;
+                predictBtn.textContent = 'RUN PREDICTION ANALYSIS';
+            }
+        }
+    </script>
+</body>
+
+</html>
